@@ -119,7 +119,7 @@ public class AdminController {
     @PutMapping("/updateWorker")
     public ResponseEntity updateWorker(@RequestBody Worker worker) {
         try {
-            return new ResponseEntity(Optional.of(workerRepositoryImplementation.updateTool(worker)), HttpStatus.OK);
+            return new ResponseEntity(Optional.of(workerRepositoryImplementation.updateWorker(worker)), HttpStatus.OK);
         }
         catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -144,7 +144,7 @@ public class AdminController {
     @GetMapping("/getOrders")
     public ResponseEntity getOrders() {
         try {
-            List<Order> orders = orderRepositoryImplementation.getOrders();
+            List<Worker> orders = workerRepositoryImplementation.getWorkers();
             if (orders.size() > 0) {
                 return new ResponseEntity(orders, HttpStatus.OK);
             }

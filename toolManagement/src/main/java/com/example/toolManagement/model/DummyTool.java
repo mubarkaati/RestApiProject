@@ -2,7 +2,7 @@ package com.example.toolManagement.model;
 
 public class DummyTool {
     private Long toolId;
-    private float toolQuantity;
+    private int toolQuantity;
 
     public Long getToolId() {
         return toolId;
@@ -12,11 +12,11 @@ public class DummyTool {
         this.toolId = toolId;
     }
 
-    public float getToolQuantity() {
+    public int getToolQuantity() {
         return toolQuantity;
     }
 
-    public void setToolQuantity(float toolQuantity) {
+    public void setToolQuantity(int toolQuantity) {
         this.toolQuantity = toolQuantity;
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 @Table(name = "order_details")
@@ -28,6 +29,8 @@ public class Order {
 
     @Column(name = "order_total_price")
     private float orderTotalPrice;
+    @Transient
+    private Map<Long, Integer> toolsQuantity;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "worker_id")
@@ -80,5 +83,25 @@ public class Order {
 
     public void setWorker(Worker worker) {
         this.worker = worker;
+    }
+
+    public Map<Long, Integer> getToolsQuantity() {
+        return toolsQuantity;
+    }
+
+    public void setToolsQuantity(Map<Long, Integer> toolsQuantity) {
+        this.toolsQuantity = toolsQuantity;
+    }
+
+    @Override
+    public String toString() {
+        return "Order{" +
+                "orderId=" + orderId +
+                ", customerName='" + customerName + '\'' +
+                ", orderedTools=" + orderedTools +
+                ", orderStatus='" + orderStatus + '\'' +
+                ", orderTotalPrice=" + orderTotalPrice +
+                ", worker=" + worker +
+                '}';
     }
 }

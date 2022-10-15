@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -23,6 +24,7 @@ public class WorkerController {
             return new ResponseEntity(Optional.of(orderRepositoryImplementation.createOrder(dummyOrder)), HttpStatus.OK);
         }
         catch (Exception exception) {
+            System.out.println(exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -30,7 +32,7 @@ public class WorkerController {
     @GetMapping("/getWorkerOrders/{workerId}")
     public ResponseEntity getOrder(@PathVariable Long workerId) {
         try {
-            Set<Order> orders = orderRepositoryImplementation.getOrdersByWorkerId(workerId);
+            List<Order> orders = orderRepositoryImplementation.getOrdersByWorkerId(workerId);
             if (orders.size() > 0) {
                 return new ResponseEntity(orders, HttpStatus.OK);
             }
@@ -39,6 +41,7 @@ public class WorkerController {
             }
         }
         catch (Exception exception) {
+            System.out.println(exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

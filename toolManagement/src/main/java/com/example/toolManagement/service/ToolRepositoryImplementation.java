@@ -30,7 +30,7 @@ public class ToolRepositoryImplementation {
             existingTool.setToolName(tool.getToolName());
             existingTool.setToolPrice(tool.getToolPrice());
             existingTool.setToolSize(tool.getToolSize());
-            existingTool.setToolQuantity(tool.getToolQuantity());
+//            existingTool.setToolQuantity(tool.getToolQuantity());
             return toolRepository.save(existingTool);
         }
         return null;

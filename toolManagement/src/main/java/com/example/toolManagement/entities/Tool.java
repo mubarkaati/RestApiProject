@@ -21,8 +21,9 @@ public class Tool {
     @Column(name = "tool_price")
     private float toolPrice;
 
-    @Column(name = "tool_quantity")
-    private float toolQuantity;
+//    @Column(name = "tool_quantity")
+//    @Transient
+//    private float toolQuantity;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST, mappedBy = "orderedTools")
     @JsonIgnore
@@ -59,14 +60,14 @@ public class Tool {
     public void setToolPrice(float toolPrice) {
         this.toolPrice = toolPrice;
     }
-
-    public float getToolQuantity() {
-        return toolQuantity;
-    }
-
-    public void setToolQuantity(float toolQuantity) {
-        this.toolQuantity = toolQuantity;
-    }
+//
+//    public float getToolQuantity() {
+//        return toolQuantity;
+//    }
+//
+//    public void setToolQuantity(float toolQuantity) {
+//        this.toolQuantity = toolQuantity;
+//    }
 
     public List<Order> getOrders() {
         return orders;
@@ -74,5 +75,24 @@ public class Tool {
 
     public void setOrders(List<Order> orders) {
         this.orders = orders;
+    }
+
+//    public float getToolQuantity() {
+//        return toolQuantity;
+//    }
+//
+//    public void setToolQuantity(float toolQuantity) {
+//        this.toolQuantity = toolQuantity;
+//    }
+
+    @Override
+    public String toString() {
+        return "Tool{" +
+                "toolId=" + toolId +
+                ", toolName='" + toolName + '\'' +
+                ", toolSize=" + toolSize +
+                ", toolPrice=" + toolPrice +
+//                ", toolQuantity=" + toolQuantity +
+                '}';
     }
 }

@@ -1,6 +1,7 @@
 package com.example.toolManagement.entities;
 
 import javax.persistence.*;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,7 +26,7 @@ public class Worker {
     private float workerSalary;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "worker")
-    private Set<Order> worker_orders;
+    private List<Order> worker_orders;
 
     public Long getWorkerId() {
         return workerId;
@@ -67,11 +68,22 @@ public class Worker {
         this.workerSalary = workerSalary;
     }
 
-    public Set<Order> getWorker_orders() {
+    public List<Order> getWorker_orders() {
         return worker_orders;
     }
 
-    public void setWorker_orders(Set<Order> worker_orders) {
+    public void setWorker_orders(List<Order> worker_orders) {
         this.worker_orders = worker_orders;
+    }
+
+    @Override
+    public String toString() {
+        return "Worker{" +
+                "workerId=" + workerId +
+                ", workerName='" + workerName + '\'' +
+                ", workerUsername='" + workerUsername + '\'' +
+                ", workerPassword='" + workerPassword + '\'' +
+                ", workerSalary=" + workerSalary +
+                '}';
     }
 }
