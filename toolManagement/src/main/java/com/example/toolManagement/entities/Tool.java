@@ -3,7 +3,9 @@ package com.example.toolManagement.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.util.List;@Entity
+import java.util.List;
+
+@Entity
 @Table(name = "tool_details")
 public class Tool {
 

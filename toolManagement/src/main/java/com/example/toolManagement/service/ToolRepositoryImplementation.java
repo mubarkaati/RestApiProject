@@ -26,7 +26,7 @@ public class ToolRepositoryImplementation {
 
     public Tool updateTool(Tool tool) {
         Tool existingTool = toolRepository.findById(tool.getToolId()).orElse(null);
-        if(existingTool != null) {
+        if (existingTool != null) {
             existingTool.setToolName(tool.getToolName());
             existingTool.setToolPrice(tool.getToolPrice());
             existingTool.setToolSize(tool.getToolSize());

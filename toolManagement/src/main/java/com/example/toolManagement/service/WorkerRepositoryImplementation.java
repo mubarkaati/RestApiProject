@@ -4,14 +4,11 @@ import com.example.toolManagement.entities.Order;
 import com.example.toolManagement.entities.Tool;
 import com.example.toolManagement.entities.User;
 import com.example.toolManagement.entities.Worker;
-import com.example.toolManagement.model.JwtRequest;
 import com.example.toolManagement.repository.OrderToolRepository;
 import com.example.toolManagement.repository.WorkeRepository;
 import com.example.toolManagement.repository.WorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -58,8 +55,8 @@ public class WorkerRepositoryImplementation {
         User user = new User();
         user.setUsername(worker.getWorkerUsername());
         user.setRole("WORKER");
-        String password=passwordEncoder.encode(worker.getWorkerPassword());
-        worker.setWorkerPassword(password);
+        String password = passwordEncoder.encode(worker.getWorkerPassword());
+        worker.setWorkerPassword(worker.getWorkerPassword());
         user.setPassword(password);
         workeRepository.save(user);
         return workerRepository.save(worker);
@@ -74,13 +71,13 @@ public class WorkerRepositoryImplementation {
     public Worker updateWorker(Worker worker) {
         Worker existingWorker = workerRepository.findById(worker.getWorkerId()).orElse(null);
         System.out.println(existingWorker);
-        if(existingWorker != null) {
+        if (existingWorker != null) {
             String username = workerRepository.findById(existingWorker.getWorkerId()).orElse(null).getWorkerUsername();
             User user = workeRepository.findByUsername(username);
             user.setUsername(worker.getWorkerUsername());
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-            String password=passwordEncoder.encode(worker.getWorkerPassword());
-            existingWorker.setWorkerPassword(password);
+            String password = passwordEncoder.encode(worker.getWorkerPassword());
+            existingWorker.setWorkerPassword(worker.getWorkerPassword());
             user.setPassword(password);
             workeRepository.save(user);
             existingWorker.setWorkerName(worker.getWorkerName());
@@ -90,6 +87,7 @@ public class WorkerRepositoryImplementation {
         }
         return null;
     }
+
     public Worker getWorker(Long workerId) {
         return workerRepository.findById(workerId).orElse(null);
     }

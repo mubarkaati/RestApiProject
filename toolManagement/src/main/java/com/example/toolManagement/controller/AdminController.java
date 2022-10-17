@@ -26,8 +26,7 @@ public class AdminController {
     public ResponseEntity createTool(@RequestBody Tool tool) {
         try {
             return new ResponseEntity(Optional.of(toolRepositoryImplementation.createTool(tool)), HttpStatus.CREATED);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -38,12 +37,10 @@ public class AdminController {
             List<Tool> tools = toolRepositoryImplementation.getTools();
             if (tools.size() > 0) {
                 return new ResponseEntity(tools, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity(null, HttpStatus.NO_CONTENT);
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -52,8 +49,7 @@ public class AdminController {
     public ResponseEntity updateTool(@RequestBody Tool tool) {
         try {
             return new ResponseEntity(Optional.of(toolRepositoryImplementation.updateTool(tool)), HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -63,8 +59,7 @@ public class AdminController {
         try {
             toolRepositoryImplementation.deleteTool(toolId);
             return new ResponseEntity(HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -78,8 +73,7 @@ public class AdminController {
     public ResponseEntity createWorker(@RequestBody Worker worker) {
         try {
             return new ResponseEntity(Optional.of(workerRepositoryImplementation.createWorker(worker)), HttpStatus.CREATED);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -90,28 +84,24 @@ public class AdminController {
             List<Worker> workers = workerRepositoryImplementation.getWorkers();
             if (workers.size() > 0) {
                 return new ResponseEntity(workers, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity(null, HttpStatus.NO_CONTENT);
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
     @GetMapping("/getWorker/{workerId}")
-    public ResponseEntity getWorker(@PathVariable Long workerId){
+    public ResponseEntity getWorker(@PathVariable Long workerId) {
         try {
             Worker worker = workerRepositoryImplementation.getWorker(workerId);
             if (worker != null) {
                 return new ResponseEntity(worker, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity(null, HttpStatus.NO_CONTENT);
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -120,8 +110,7 @@ public class AdminController {
     public ResponseEntity updateWorker(@RequestBody Worker worker) {
         try {
             return new ResponseEntity(Optional.of(workerRepositoryImplementation.updateWorker(worker)), HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -131,8 +120,7 @@ public class AdminController {
         try {
             workerRepositoryImplementation.removeWorker(workerId);
             return new ResponseEntity(HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -147,12 +135,10 @@ public class AdminController {
             List<Worker> orders = workerRepositoryImplementation.getWorkers();
             if (orders.size() > 0) {
                 return new ResponseEntity(orders, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity(null, HttpStatus.NO_CONTENT);
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

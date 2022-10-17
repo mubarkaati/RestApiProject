@@ -80,8 +80,7 @@ public class OrderRepositoryImplementation {
                 order.setToolsQuantity(toolsQuantity);
             }
             return orders;
-        }
-        else {
+        } else {
             return null;
         }
     }
@@ -127,8 +126,7 @@ public class OrderRepositoryImplementation {
                 order.setToolsQuantity(toolsQuantity);
             }
             return orders;
-        }
-        else {
+        } else {
             return null;
         }
     }

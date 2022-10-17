@@ -22,8 +22,7 @@ public class WorkerController {
     public ResponseEntity createOrder(@RequestBody DummyOrder dummyOrder) {
         try {
             return new ResponseEntity(Optional.of(orderRepositoryImplementation.createOrder(dummyOrder)), HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -35,12 +34,10 @@ public class WorkerController {
             List<Order> orders = orderRepositoryImplementation.getOrdersByWorkerId(workerId);
             if (orders.size() > 0) {
                 return new ResponseEntity(orders, HttpStatus.OK);
-            }
-            else {
+            } else {
                 return new ResponseEntity(null, HttpStatus.NO_CONTENT);
             }
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             System.out.println(exception);
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -50,8 +47,7 @@ public class WorkerController {
     public ResponseEntity updateOrder(@RequestBody DummyOrder dummyOrder) {
         try {
             return new ResponseEntity(Optional.of(orderRepositoryImplementation.updateOrder(dummyOrder)), HttpStatus.OK);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
