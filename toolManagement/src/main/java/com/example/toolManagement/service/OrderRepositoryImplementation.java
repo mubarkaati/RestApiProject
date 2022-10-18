@@ -1,7 +1,7 @@
 package com.example.toolManagement.service;
 
 import com.example.toolManagement.entities.Order;
-import com.example.toolManagement.entities.OrderTool;
+import com.example.toolManagement.entities.OrderToolQuantity;
 import com.example.toolManagement.entities.Tool;
 import com.example.toolManagement.entities.Worker;
 import com.example.toolManagement.model.DummyOrder;
@@ -52,12 +52,12 @@ public class OrderRepositoryImplementation {
         while (count < dummyTools.size()) {
             DummyTool dummyTool = dummyTools.get(count++);
             Tool tool = toolRepository.findById(dummyTool.getToolId()).orElse(null);
-            OrderTool orderTool = new OrderTool();
-            orderTool.setOrderId(order.getOrderId());
-            orderTool.setToolId(tool.getToolId());
-            orderTool.setToolQuantity(dummyTool.getToolQuantity());
-            System.out.println(orderTool);
-            orderToolRepository.save(orderTool);
+            OrderToolQuantity orderToolQuantity = new OrderToolQuantity();
+            orderToolQuantity.setOrderId(order.getOrderId());
+            orderToolQuantity.setToolId(tool.getToolId());
+            orderToolQuantity.setToolQuantity(dummyTool.getToolQuantity());
+            System.out.println(orderToolQuantity);
+            orderToolRepository.save(orderToolQuantity);
         }
         System.out.println(orderRepository.findById(order.getOrderId()).orElse(null));
         return orderRepository.findById(order.getOrderId()).orElse(null);

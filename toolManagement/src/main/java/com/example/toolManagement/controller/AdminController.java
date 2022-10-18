@@ -1,6 +1,5 @@
 package com.example.toolManagement.controller;
 
-import com.example.toolManagement.entities.Order;
 import com.example.toolManagement.entities.Tool;
 import com.example.toolManagement.entities.Worker;
 import com.example.toolManagement.service.OrderRepositoryImplementation;
@@ -16,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
+@CrossOrigin(origins = "*")
 public class AdminController {
     @Autowired
     ToolRepositoryImplementation toolRepositoryImplementation;

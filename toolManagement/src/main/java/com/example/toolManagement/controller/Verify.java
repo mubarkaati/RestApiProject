@@ -2,7 +2,7 @@ package com.example.toolManagement.controller;
 
 import com.example.toolManagement.model.JwtRequest;
 import com.example.toolManagement.model.JwtResponse;
-import com.example.toolManagement.repository.WorkeRepository;
+import com.example.toolManagement.repository.UserRepository;
 import com.example.toolManagement.repository.WorkerRepository;
 import com.example.toolManagement.utils.JwtUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +25,7 @@ public class Verify {
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired
-    WorkeRepository workeRepository;
+    UserRepository userRepository;
 
     @Autowired
     WorkerRepository workerRepository;
@@ -44,13 +44,12 @@ public class Verify {
         }
         final UserDetails userDetails = userDetailsService.loadUserByUsername(jwtRequest.getUsername());
         final String token = jwtUtility.generateToken(userDetails);
-        final String userRole = workeRepository.findByUsername(jwtRequest.getUsername()).getRole();
+        final String userRole = userRepository.findByUsername(jwtRequest.getUsername()).getRole();
         final Long userId = workerRepository.findIdByUsername(jwtRequest.getUsername());
         if (userRole.equals("WORKER")) {
             return new JwtResponse(token, userRole, userId);
-        }
-        else{
-            return new JwtResponse(token, userRole,1L);
+        } else {
+            return new JwtResponse(token, userRole, 1L);
         }
     }
 }

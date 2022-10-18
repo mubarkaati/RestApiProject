@@ -3,7 +3,8 @@ package com.example.toolManagement.entities;
 import javax.persistence.*;
 
 @Entity
-public class OrderTool {
+@Table(name = "order_tool")
+public class OrderToolQuantity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int orderToolId;

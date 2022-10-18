@@ -5,7 +5,7 @@ import com.example.toolManagement.entities.Tool;
 import com.example.toolManagement.entities.User;
 import com.example.toolManagement.entities.Worker;
 import com.example.toolManagement.repository.OrderToolRepository;
-import com.example.toolManagement.repository.WorkeRepository;
+import com.example.toolManagement.repository.UserRepository;
 import com.example.toolManagement.repository.WorkerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +20,7 @@ public class WorkerRepositoryImplementation {
     @Autowired
     WorkerRepository workerRepository;
     @Autowired
-    WorkeRepository workeRepository;
+    UserRepository userRepository;
     @Autowired
     OrderToolRepository orderToolRepository;
 
@@ -58,13 +58,13 @@ public class WorkerRepositoryImplementation {
         String password = passwordEncoder.encode(worker.getWorkerPassword());
         worker.setWorkerPassword(worker.getWorkerPassword());
         user.setPassword(password);
-        workeRepository.save(user);
+        userRepository.save(user);
         return workerRepository.save(worker);
     }
 
     public void removeWorker(Long workerId) {
         String username = workerRepository.findById(workerId).orElse(null).getWorkerUsername();
-        workeRepository.deleteById(workeRepository.findByUsername(username).getId());
+        userRepository.deleteById(userRepository.findByUsername(username).getId());
         workerRepository.deleteById(workerId);
     }
 
@@ -73,13 +73,13 @@ public class WorkerRepositoryImplementation {
         System.out.println(existingWorker);
         if (existingWorker != null) {
             String username = workerRepository.findById(existingWorker.getWorkerId()).orElse(null).getWorkerUsername();
-            User user = workeRepository.findByUsername(username);
+            User user = userRepository.findByUsername(username);
             user.setUsername(worker.getWorkerUsername());
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             String password = passwordEncoder.encode(worker.getWorkerPassword());
             existingWorker.setWorkerPassword(worker.getWorkerPassword());
             user.setPassword(password);
-            workeRepository.save(user);
+            userRepository.save(user);
             existingWorker.setWorkerName(worker.getWorkerName());
             existingWorker.setWorkerUsername(worker.getWorkerUsername());
             existingWorker.setWorkerSalary(worker.getWorkerSalary());
