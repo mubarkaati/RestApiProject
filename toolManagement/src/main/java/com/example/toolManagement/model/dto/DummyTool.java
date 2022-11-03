@@ -1,4 +1,4 @@
-package com.example.toolManagement.model;
+package com.example.toolManagement.model.dto;
 
 public class DummyTool {
     private Long toolId;

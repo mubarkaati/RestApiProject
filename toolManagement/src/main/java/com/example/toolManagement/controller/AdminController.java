@@ -15,11 +15,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/admin")
-@CrossOrigin(origins = "*")
+@CrossOrigin("*")
 public class AdminController {
     @Autowired
     ToolRepositoryImplementation toolRepositoryImplementation;
-
 
     //Tools Operations Mapping Starts Here
     @PostMapping("/createTool")
@@ -55,9 +54,9 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteTool/{toolId}")
-    public ResponseEntity deleteTool(@PathVariable Long toolId) {
+    public ResponseEntity deleteTool(@PathVariable String toolId) {
         try {
-            toolRepositoryImplementation.deleteTool(toolId);
+            toolRepositoryImplementation.deleteTool(Long.parseLong(toolId));
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -93,9 +92,9 @@ public class AdminController {
     }
 
     @GetMapping("/getWorker/{workerId}")
-    public ResponseEntity getWorker(@PathVariable Long workerId) {
+    public ResponseEntity getWorker(@PathVariable String workerId) {
         try {
-            Worker worker = workerRepositoryImplementation.getWorker(workerId);
+            Worker worker = workerRepositoryImplementation.getWorker(Long.parseLong(workerId));
             if (worker != null) {
                 return new ResponseEntity(worker, HttpStatus.OK);
             } else {
@@ -116,9 +115,9 @@ public class AdminController {
     }
 
     @DeleteMapping("/deleteWorker/{workerId}")
-    public ResponseEntity deleteWorker(@PathVariable Long workerId) {
+    public ResponseEntity deleteWorker(@PathVariable String workerId) {
         try {
-            workerRepositoryImplementation.removeWorker(workerId);
+            workerRepositoryImplementation.removeWorker(Long.parseLong(workerId));
             return new ResponseEntity(HttpStatus.OK);
         } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

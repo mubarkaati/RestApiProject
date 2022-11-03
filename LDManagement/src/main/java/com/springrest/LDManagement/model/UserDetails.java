@@ -1,19 +1,18 @@
-package com.example.toolManagement.model;
+package com.springrest.LDManagement.model;
 
-import com.example.toolManagement.entities.User;
+import com.springrest.LDManagement.entities.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.Collections;
 
 
-public class CustomerUserDetails implements UserDetails {
+public class UserDetails implements org.springframework.security.core.userdetails.UserDetails {
 
     private User user;
 
-    public CustomerUserDetails(User user) {
+    public UserDetails(User user) {
         super();
         this.user = user;
     }
@@ -30,7 +29,7 @@ public class CustomerUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return user.getEmail();
     }
 
     @Override
