@@ -5,6 +5,7 @@ import com.example.assuremyevent.entities.Event;
 import com.example.assuremyevent.entities.User;
 import com.example.assuremyevent.model.dto.request.EventRequestDto;
 import com.example.assuremyevent.model.dto.response.EventResponseDto;
+import com.example.assuremyevent.model.dto.response.FeedbackResponseDto;
 import com.example.assuremyevent.repository.BookingRepository;
 import com.example.assuremyevent.repository.EventCategoryRepository;
 import com.example.assuremyevent.repository.EventRepository;
@@ -66,7 +67,10 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity getEvents(int organizerId) {
         try {
-            List<Event> events = eventRepository.findByUser(organizerId);
+            List<Event> eventList = eventRepository.findAll();
+            List<Event> events = eventList.stream()
+                    .filter(event -> event.getUser().getUserId() == organizerId)
+                    .collect(Collectors.toList());
             if (!events.isEmpty()) {
                 return new ResponseEntity(
                         events.stream()
@@ -128,23 +132,16 @@ public class EventServiceImpl implements EventService {
     public ResponseEntity manageStatus(String bookingStatus, int bookingId, int organizerId) {
         try {
             Booking existingBooking = bookingRepository.findById(bookingId).orElse(null);
-            if (existingBooking != null) {
-                if (existingBooking.isDeleted() != true) {
-                    Booking booking = userRepository.findById(organizerId).orElse(null)
-                            .getBookings()
-                            .stream()
-                            .filter(savedBooking -> savedBooking.equals(existingBooking))
-                            .collect(Collectors.toList())
-                            .get(0);
-                    booking.setBookingStatus(bookingStatus);
-                    return new ResponseEntity("Booking Status Changed Successfully", HttpStatus.OK);
-                } else {
-                    return new ResponseEntity("Cannot Change Status of Deleted Booking", HttpStatus.NOT_MODIFIED);
-                }
+            System.out.println(existingBooking.getEvent().getUser().getUserId());
+            if ((existingBooking != null) && (existingBooking.getEvent().getUser().getUserId() == organizerId) && (existingBooking.isDeleted() == false)) {
+                existingBooking.setBookingStatus(bookingStatus);
+                bookingRepository.save(existingBooking);
+                return new ResponseEntity("Booking Status Changed Successfully", HttpStatus.OK);
             } else {
                 return new ResponseEntity("Invalid Booking Id", HttpStatus.NOT_FOUND);
             }
         } catch (Exception exception) {
+            exception.printStackTrace();
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -170,14 +167,13 @@ public class EventServiceImpl implements EventService {
     @Override
     public ResponseEntity getFeedback(int organizerId) {
         try {
-            User user = userRepository.findById(organizerId).orElse(null);
-            if (user != null) {
-                if (!user.getFeedbacks().isEmpty())
-                    return new ResponseEntity(Optional.of(user.getFeedbacks()), HttpStatus.OK);
-                else
-                    return new ResponseEntity("Don't Have any Feedbacks", HttpStatus.NO_CONTENT);
+            List<Event> events = eventRepository.findAll();
+            if ((!events.isEmpty()) && (events.stream().filter(event -> event.getUser().getUserId() == organizerId).collect(Collectors.toList())).size() > 0) {
+                return new ResponseEntity(Optional.of(events.stream()
+                        .filter(event -> event.getUser().getUserId() == organizerId)
+                        .collect(Collectors.toList())), HttpStatus.OK);
             } else {
-                return new ResponseEntity("Invalid OrganizerId", HttpStatus.NOT_FOUND);
+                return new ResponseEntity("No Content Available", HttpStatus.NO_CONTENT);
             }
         } catch (Exception exception) {
             return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);

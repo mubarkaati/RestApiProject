@@ -1,7 +1,7 @@
 package com.example.assuremyevent.controller;
 
 import com.example.assuremyevent.model.dto.BookingDto;
-import com.example.assuremyevent.model.dto.FeedbackDto;
+import com.example.assuremyevent.model.dto.request.FeedbackRequestDto;
 import com.example.assuremyevent.service.BookingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +14,9 @@ public class CustomerController {
     @Autowired
     BookingService bookingService;
 
-    @PostMapping("/addBooking/{customerId}")
-    public ResponseEntity addBooking(@RequestBody BookingDto booking, @PathVariable int customerId) {
-        return bookingService.createBooking(booking, customerId);
+    @PostMapping("/addBooking")
+    public ResponseEntity addBooking(@RequestBody BookingDto booking) {
+        return bookingService.createBooking(booking);
     }
 
     @DeleteMapping("/deleteBooking/{bookingId}/{customerId}")
@@ -35,7 +35,7 @@ public class CustomerController {
     }
 
     @PostMapping("/addFeedback")
-    public ResponseEntity addFeedback(@RequestBody FeedbackDto feedbackDto) {
-        return bookingService.addFeedback(feedbackDto);
+    public ResponseEntity addFeedback(@RequestBody FeedbackRequestDto feedbackRequestDto) {
+        return bookingService.addFeedback(feedbackRequestDto);
     }
 }

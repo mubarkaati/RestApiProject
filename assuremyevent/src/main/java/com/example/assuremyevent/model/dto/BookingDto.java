@@ -21,4 +21,5 @@ public class BookingDto {
     private String bookingStatus;
     private int eventId;
     private int customerId;
+    private boolean isDeleted;
 }

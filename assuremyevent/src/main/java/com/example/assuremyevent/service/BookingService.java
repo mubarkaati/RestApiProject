@@ -1,12 +1,11 @@
 package com.example.assuremyevent.service;
 
 import com.example.assuremyevent.model.dto.BookingDto;
-import com.example.assuremyevent.model.dto.FeedbackDto;
+import com.example.assuremyevent.model.dto.request.FeedbackRequestDto;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
 
 public interface BookingService {
-    ResponseEntity createBooking(BookingDto booking, int customerId);
+    ResponseEntity createBooking(BookingDto booking);
 
     ResponseEntity deleteBooking(int bookingId, int customerId);
 
@@ -14,5 +13,5 @@ public interface BookingService {
 
     ResponseEntity showEvents();
 
-    ResponseEntity addFeedback(FeedbackDto feedbackDto);
+    ResponseEntity addFeedback(FeedbackRequestDto feedbackRequestDto);
 }

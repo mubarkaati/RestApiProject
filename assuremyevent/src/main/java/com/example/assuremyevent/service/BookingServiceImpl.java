@@ -4,13 +4,14 @@ import com.example.assuremyevent.entities.Booking;
 import com.example.assuremyevent.entities.Event;
 import com.example.assuremyevent.entities.Feedback;
 import com.example.assuremyevent.model.dto.BookingDto;
-import com.example.assuremyevent.model.dto.FeedbackDto;
+import com.example.assuremyevent.model.dto.request.FeedbackRequestDto;
 import com.example.assuremyevent.model.dto.response.EventResponseDto;
 import com.example.assuremyevent.repository.BookingRepository;
 import com.example.assuremyevent.repository.EventRepository;
 import com.example.assuremyevent.repository.FeedbackRepository;
 import com.example.assuremyevent.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -35,7 +36,7 @@ public class BookingServiceImpl implements BookingService {
     FeedbackRepository feedbackRepository;
 
     @Override
-    public ResponseEntity createBooking(BookingDto booking, int customerId) {
+    public ResponseEntity createBooking(BookingDto booking) {
         try {
             Booking newBooking = new Booking();
             newBooking.setBookingStatus("Pending");
@@ -78,10 +79,10 @@ public class BookingServiceImpl implements BookingService {
             Booking booking = bookingRepository.findById(bookingId).orElse(null);
             if (booking != null) {
                 if (booking.isDeleted() && booking.getUser().getUserId() == customerId) {
-                    return new ResponseEntity("Booking is Already Deleted", HttpStatus.NOT_MODIFIED);
+                    return new ResponseEntity("Booking is Already Deleted",new HttpHeaders(),HttpStatus.NOT_MODIFIED);
                 } else if (booking.getUser().getUserId() == customerId) {
                     booking.setDeleted(true);
-                    return new ResponseEntity(bookingRepository.save(booking), HttpStatus.ACCEPTED);
+                    return new ResponseEntity("Deleted Successfully", HttpStatus.ACCEPTED);
                 } else {
                     return new ResponseEntity("No Booking Exist With This bookingId", HttpStatus.NO_CONTENT);
                 }
@@ -112,7 +113,8 @@ public class BookingServiceImpl implements BookingService {
                                 booking.getEndDate(),
                                 booking.getBookingStatus(),
                                 booking.getEvent().getEventId(),
-                                booking.getUser().getUserId()
+                                booking.getUser().getUserId(),
+                                booking.isDeleted()
                         ))), HttpStatus.OK);
             } else {
                 return new ResponseEntity("You Don't Have Any Booking", HttpStatus.NO_CONTENT);
@@ -147,16 +149,16 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public ResponseEntity addFeedback(FeedbackDto feedbackDto) {
+    public ResponseEntity addFeedback(FeedbackRequestDto feedbackRequestDto) {
         try {
             Feedback feedback = new Feedback();
-            feedback.setFeedbackRating(feedbackDto.getFeedbackRating());
-            feedback.setFeedbackComment(feedbackDto.getFeedbackComment());
-            feedback.setEvent(eventRepository.findById(feedbackDto.getEventId()).orElse(null));
-            feedback.setUser(userRepository.findById(feedbackDto.getCustomerId()).orElse(null));
+            feedback.setFeedbackRating(feedbackRequestDto.getFeedbackRating());
+            feedback.setFeedbackComment(feedbackRequestDto.getFeedbackComment());
+            feedback.setEvent(eventRepository.findById(feedbackRequestDto.getEventId()).orElse(null));
+            feedback.setUser(userRepository.findById(feedbackRequestDto.getCustomerId()).orElse(null));
 
-            Event event = eventRepository.findById(feedbackDto.getEventId()).orElse(null);
-            event.setAverageFeedbackRating((event.getAverageFeedbackRating() + feedbackDto.getFeedbackRating()) / 2);
+            Event event = eventRepository.findById(feedbackRequestDto.getEventId()).orElse(null);
+            event.setAverageFeedbackRating((event.getAverageFeedbackRating() + feedbackRequestDto.getFeedbackRating()) / 2);
             eventRepository.save(event);
 
             return new ResponseEntity(Optional.of(feedbackRepository.save(feedback)), HttpStatus.OK);

@@ -17,12 +17,12 @@ public class Feedback {
     @Column(nullable = false)
     private String feedbackComment;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "event")
     @JsonIgnore
     private Event event;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "customer")
     @JsonIgnore
     private User user;

@@ -16,10 +16,10 @@ public class User {
     private String userPassword;
     private String userRole;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Booking> bookings;
 
-    @OneToMany(orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Feedback> feedbacks;
 
     //for admin to manage event category
