@@ -2,6 +2,7 @@ package com.example.assuremyevent.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 @Entity
 public class Event {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int eventId;
     @Column(nullable = false)
     private String eventName;
@@ -22,14 +23,16 @@ public class Event {
     @Column(nullable = false)
     private float pricePerPerson;
     @Column(nullable = false)
+    @ColumnDefault("0")
     private boolean isDeleted;
     @Column(nullable = false)
+    @ColumnDefault("0")
     private float averageFeedbackRating;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_organizer")
     @JsonIgnore
-    private EventOrganizer eventOrganizer;
+    private User user;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "event_category")

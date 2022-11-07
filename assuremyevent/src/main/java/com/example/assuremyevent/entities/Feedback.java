@@ -9,6 +9,7 @@ import javax.persistence.*;
 @Entity
 public class Feedback {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int feedbackId;
     @Column(nullable = false)
     private float feedbackRating;
@@ -24,5 +25,5 @@ public class Feedback {
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer")
     @JsonIgnore
-    private Customer customer;
+    private User user;
 }
