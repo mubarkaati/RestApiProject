@@ -1,5 +1,6 @@
 package com.usman.auction.dto.request;
 
+import com.sun.istack.NotNull;
 import lombok.Data;
 
 @Data

@@ -28,8 +28,8 @@ public class AuctionServiceImpl implements AuctionService {
         if (customerRepository.findById(requestDto.getCustomerId()).isPresent()) {
             if (productRepository.findById(requestDto.getProductId()).isPresent()) {
                 if (!productRepository.findById(requestDto.getProductId()).orElse(null).isSold()) {
-                    if ((auctionRepository.maxAuction(productRepository.findById(requestDto.getProductId()).orElse(null)).get(0)) != null) {
-                        if (!((requestDto.getBidPrice() > productRepository.findById(requestDto.getProductId()).orElse(null).getBasePrice()) && (requestDto.getBidPrice() > (auctionRepository.maxAuction(productRepository.findById(requestDto.getProductId()).orElse(null)).get(0).getBidPrice())))) {
+                    if ((auctionRepository.maxAuction(productRepository.findById(requestDto.getProductId()).orElse(null))) != null) {
+                        if (!((requestDto.getBidPrice() > productRepository.findById(requestDto.getProductId()).orElse(null).getBasePrice()) && (requestDto.getBidPrice() > (auctionRepository.maxAuction(productRepository.findById(requestDto.getProductId()).orElse(null)).getBidPrice())))) {
                             ExceptionHandel.message = "Bid price is less then current bid price";
                             ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
                             return null;

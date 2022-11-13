@@ -36,8 +36,7 @@ public class ProductServiceImpl implements ProductService {
 
             ProductResponseDto responseDto = this.modelMapper.map(savedProduct, ProductResponseDto.class);
             return responseDto;
-        }
-        else {
+        } else {
             ExceptionHandel.message = "Product name is not available";
             ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
             return null;
@@ -49,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = productRepository.findById(requestDto.getProductId()).orElse(null);
         if ((product != null) && (product.getVendor().getVendorId() == requestDto.getVendorId())) {
             if (!product.isSold()) {
-                Auction auction = auctionRepository.maxAuction(product).get(0);
+                Auction auction = auctionRepository.maxAuction(product);
                 if (auction != null) {
                     product.setSold(true);
                     product.setSoldPrice(auction.getBidPrice());
@@ -67,14 +66,12 @@ public class ProductServiceImpl implements ProductService {
                     ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
                     return null;
                 }
-            }
-            else {
+            } else {
                 ExceptionHandel.message = "product is already sold";
                 ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
                 return null;
             }
-        }
-        else {
+        } else {
             ExceptionHandel.message = "Invalid productId or vendorId";
             ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
             return null;

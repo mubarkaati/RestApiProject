@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface AuctionRepository extends JpaRepository<Auction, Integer> {
     @Query("select a from Auction a where a.product in ?1 order by a.bidPrice")
-    List<Auction> maxAuction(Product product);
+    Auction maxAuction(Product product);
 
     Auction findByCustomer(Customer byId);
 }

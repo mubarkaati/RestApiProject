@@ -4,6 +4,7 @@ import com.usman.auction.dto.request.VendorRequestDto;
 import com.usman.auction.dto.response.VendorResponseDto;
 import com.usman.auction.entities.Vendor;
 import com.usman.auction.exceptions.ExceptionHandel;
+import com.usman.auction.exceptions.NumberNotAvailableException;
 import com.usman.auction.repository.VendorRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +35,10 @@ public class VendorServiceImpl implements VendorService {
                 System.out.println(responseDto);
                 return responseDto;
             } else {
-                ExceptionHandel.message = "phone number is already registered";
-                ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
-                return null;
+                throw new NumberNotAvailableException();
+//                ExceptionHandel.message = "phone number is already registered";
+//                ExceptionHandel.httpStatus = HttpStatus.NOT_ACCEPTABLE;
+//                return null;
             }
         } else {
             ExceptionHandel.message = "length of phone number should be equal to 10";

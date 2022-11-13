@@ -1,5 +1,6 @@
 package com.usman.auction.entities;
 
+import com.sun.istack.NotNull;
 import lombok.Data;
 
 import javax.persistence.*;

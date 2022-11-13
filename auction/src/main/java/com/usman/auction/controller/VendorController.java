@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.HttpEntityMethodProcessor;
 
 import java.util.Optional;
 
@@ -28,19 +29,17 @@ public class VendorController {
 
     @PostMapping("/registerVendor")
     public ResponseEntity addVendor(@RequestBody VendorRequestDto requestDto) {
-        try {
-            System.out.println(requestDto.getPhoneNumber());
-            System.out.println(requestDto.getVendorName());
+//        try {
             VendorResponseDto responseDto = vendorService.addVendor(requestDto);
             if (responseDto != null)
                 return new ResponseEntity(Optional.of(responseDto), HttpStatus.OK);
             else
                 return new ResponseEntity(ExceptionHandel.message, ExceptionHandel.httpStatus);
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+//        }
+//        catch (Exception exception) {
+//            exception.printStackTrace();
+//            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+//        }
     }
 
     @PostMapping("/registerProduct")
