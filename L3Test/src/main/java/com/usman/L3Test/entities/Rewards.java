@@ -5,7 +5,6 @@ import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity
 @Data
@@ -16,13 +15,12 @@ public class Rewards {
 
     private int rewardsPoint;
 
-    private LocalDate gameDate;
+    private LocalDate gameDate = LocalDate.now();
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JsonIgnore
     private Game game;
 
     @ManyToOne(cascade = CascadeType.PERSIST)
-    @JsonIgnore
     private Player player;
 }

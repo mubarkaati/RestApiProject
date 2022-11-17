@@ -1,7 +1,8 @@
 package com.usman.L3Test.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 import java.util.List;
@@ -15,9 +16,10 @@ public class Player {
 
     private String playerName;
 
-    @ColumnDefault(value = "0")
+    @Value("false")
     private boolean inGame;
 
     @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Rewards> rewards;
 }

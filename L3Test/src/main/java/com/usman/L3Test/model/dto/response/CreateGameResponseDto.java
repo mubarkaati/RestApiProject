@@ -6,6 +6,6 @@ import lombok.Data;
 public class CreateGameResponseDto {
     private int gameId;
     private String gameName;
-    private String player1Name;
-    private String player2Name;
+    private int player1Id;
+    private int player2Id;
 }

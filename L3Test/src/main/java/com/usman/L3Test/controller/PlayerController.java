@@ -3,7 +3,6 @@ package com.usman.L3Test.controller;
 import com.usman.L3Test.model.dto.request.CreateGameRequestDto;
 import com.usman.L3Test.model.dto.request.PlayerRequestDto;
 import com.usman.L3Test.model.dto.response.CreateGameResponseDto;
-import com.usman.L3Test.model.dto.response.PlayerResponseDto;
 import com.usman.L3Test.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +26,10 @@ public class PlayerController {
 
     @PostMapping("/createGame")
     public ResponseEntity createGame(@RequestBody CreateGameRequestDto requestDto) {
-        return new ResponseEntity(playerService.createGame(requestDto), HttpStatus.OK);
+        CreateGameResponseDto responseDto = playerService.createGame(requestDto);
+        if (responseDto != null)
+            return new ResponseEntity(responseDto, HttpStatus.OK);
+        else
+            return new ResponseEntity("Players not free try again", HttpStatus.NOT_ACCEPTABLE);
     }
 }

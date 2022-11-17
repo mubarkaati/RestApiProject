@@ -1,7 +1,6 @@
 package com.usman.L3Test.service;
 
 import com.usman.L3Test.entities.Game;
-import com.usman.L3Test.entities.Player;
 import com.usman.L3Test.entities.Rewards;
 import com.usman.L3Test.exception.PositionOccupiedException;
 import com.usman.L3Test.model.dto.request.MovePlayerRequestDto;
@@ -27,53 +26,25 @@ public class GameServiceImpl implements GameService {
     PlayerRepository playerRepository;
 
     public boolean movePlayer(MovePlayerRequestDto requestDto) {
-        Game game = gameRepository.findById(requestDto.getGameId()).orElse(null);
+        Game game = gameRepository.findGameInfo(requestDto.getGameId());
+
+        int newCoordinateX = requestDto.getPlayerPositionX();
+        int newCoordinateY = requestDto.getPlayerPositionY();
+        int player1X = game.getPlayer1PositionX();
+        int player1Y = game.getPlayer1PositionY();
+        int player2X = game.getPlayer2PositionX();
+        int player2Y = game.getPlayer2PositionY();
 
         if (game.isActive()) {
-            int x1 = 0;
-            int x2 = 0;
-            int y1 = 0;
-            int y2 = 0;
-
-            int whichPlayer = 0;
-
-            if (game.getPlayer1Id() == requestDto.getPlayerId()) {
-                whichPlayer = 1;
-                x1 = game.getPlayer1PositionX();
-                x2 = requestDto.getPlayerPositionX();
-
-                y1 = game.getPlayer1PositionY();
-                y2 = requestDto.getPlayerPositionY();
-
-                if (requestDto.getPlayerPositionX() == game.getPlayer2PositionX() && requestDto.getPlayerPositionY() == game.getPlayer2PositionY()) {
-                    throw new PositionOccupiedException();
-                }
-
-            } else if (game.getPlayer2Id() == requestDto.getPlayerId()) {
-                x1 = game.getPlayer2PositionX();
-                x2 = requestDto.getPlayerPositionX();
-
-                y1 = game.getPlayer2PositionY();
-                y2 = requestDto.getPlayerPositionY();
-
-                if (requestDto.getPlayerPositionX() == game.getPlayer1PositionX() && requestDto.getPlayerPositionY() == game.getPlayer1PositionY()) {
-                    throw new PositionOccupiedException();
-                }
-            }
-            int partialDistance = (((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1)));
-            if (partialDistance < 0) {
-                partialDistance = partialDistance * (-1);
-            }
-            int distance = (int) Math.sqrt(partialDistance);
+            boolean player1 = game.getPlayer1Id() == requestDto.getPlayerId();
+            int distance = player1 ? getUpdatedGame(player1X, player1Y, newCoordinateX, newCoordinateY) : getUpdatedGame(player2X, player2Y, newCoordinateX, newCoordinateY);
             if (distance == 1) {
-                if (whichPlayer == 1) {
-                    game.setPlayer1PositionX(requestDto.getPlayerPositionX());
-                    game.setPlayer1PositionY(requestDto.getPlayerPositionY());
-                } else {
-                    game.setPlayer2PositionX(requestDto.getPlayerPositionX());
-                    game.setPlayer2PositionY(requestDto.getPlayerPositionY());
-                }
-                gameRepository.save(game);
+                if (player1 ? getCollision(player2X, player2Y, newCoordinateX, newCoordinateY) : getCollision(player1X, player1Y, newCoordinateX, newCoordinateY))
+                    throw new PositionOccupiedException();
+                if (player1)
+                    gameRepository.updateCoordinate1(game.getGameId(), newCoordinateX, newCoordinateY);
+                else
+                    gameRepository.updateCoordinate2(game.getGameId(), newCoordinateX, newCoordinateY);
                 return true;
             } else {
                 return false;
@@ -84,55 +55,46 @@ public class GameServiceImpl implements GameService {
         }
     }
 
+    private boolean getCollision(int x1, int y1, int x2, int y2) {
+        if (x1 == x2 && y1 == y2)
+            return true;
+        else
+            return false;
+    }
+
+    private int getUpdatedGame(int x1, int y1, int x2, int y2) {
+        return (int) Math.sqrt(Math.abs(((x2 - x1) * (x2 - x1)) + ((y2 - y1) * (y2 - y1))));
+    }
+
     @Override
     public boolean shootPlayer(ShootPlayerRequestDto requestDto) {
         Game game = gameRepository.findById(requestDto.getGameId()).orElse(null);
 
         if (game.isActive()) {
-            int x = requestDto.getShootPositionX();
-            int y = requestDto.getShootPositionY();
+            boolean isFirstPlayer = requestDto.getPlayerId() == game.getPlayer1Id();
 
-            if (requestDto.getPlayerId() == game.getPlayer1Id()) {
-                if ((x == game.getPlayer2PositionX()) && (y == game.getPlayer2PositionY())) {
+            boolean hitStatus = isFirstPlayer ? game.getPlayer2PositionX() == requestDto.getShootPositionX()
+                    && game.getPlayer2PositionY() == requestDto.getShootPositionY()
+                    : game.getPlayer1PositionX() == requestDto.getShootPositionX()
+                    && game.getPlayer1PositionY() == requestDto.getShootPositionY();
+
+            if (hitStatus) {
+                if (isFirstPlayer) {
                     game.setPlayer2Health(game.getPlayer2Health() - 20);
-                }
-            } else if (requestDto.getPlayerId() == game.getPlayer2Id()) {
-                if ((x == game.getPlayer1PositionX()) && (y == game.getPlayer1PositionY())) {
-                    game.setPlayer2Health(game.getPlayer1Health() - 20);
-                }
-            }
-
-            if ((game.getPlayer1Health() == 0) || (game.getPlayer2Health() == 0)) {
-                //set game status false cause game is over
-                game.setActive(false);
-                if (game.getPlayer2Health() == 0) {
-                    Rewards rewards = new Rewards();
-                    rewards.setPlayer(playerRepository.findById(game.getPlayer1Id()).orElse(null));
-                    rewards.setGame(game);
-                    rewards.setRewardsPoint(100);
-                    rewards.setGameDate(LocalDate.now());
-                    rewardsRepository.save(rewards);
                 } else {
+                    game.setPlayer1Health(game.getPlayer1Health() - 20);
+                }
+                if (game.getPlayer1Health() == 0 || game.getPlayer2Health() == 0) {
+                    game.setActive(false);
+                    playerRepository.updatePlayerStatus(game.getPlayer1Id(), game.getPlayer2Id());
                     Rewards rewards = new Rewards();
-                    rewards.setPlayer(playerRepository.findById(game.getPlayer2Id()).orElse(null));
-                    rewards.setGame(game);
                     rewards.setRewardsPoint(100);
-                    rewards.setGameDate(LocalDate.now());
+                    rewards.setPlayer(playerRepository.findById(requestDto.getPlayerId()).orElse(null));
+                    rewards.setGame(game);
                     rewardsRepository.save(rewards);
                 }
-
-                Player player1 = playerRepository.findById(game.getPlayer1Id()).orElse(null);
-                Player player2 = playerRepository.findById(game.getPlayer2Id()).orElse(null);
-
-                player1.setInGame(false);
-                player2.setInGame(false);
-
-                //save status free of both player
-                playerRepository.save(player1);
-                playerRepository.save(player2);
+                gameRepository.save(game);
             }
-
-            gameRepository.save(game);
             return true;
         } else {
             //validation part need to be done later
